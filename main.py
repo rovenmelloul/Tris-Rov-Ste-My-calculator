@@ -1,6 +1,6 @@
+# main.py
+from GUI import CalculatriceApp
 
-
-class Calculator():
-    def __init__():
-        pass
-    
+if __name__ == "__main__":
+    app = CalculatriceApp()
+    app.mainloop()
