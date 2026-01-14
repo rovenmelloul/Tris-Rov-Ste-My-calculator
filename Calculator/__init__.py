@@ -1,3 +1,3 @@
-from .calculator import CalculatorLogic
+from .calculator import Calculator
 
-__all__ = ["CalculatorLogic"]
+__all__ = ["Calculator"]

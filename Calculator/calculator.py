@@ -1,86 +1,75 @@
-import re
+class Calculator():
 
+    def init(self):
+        print("Initialize")
+        pass
 
-class CalculatorLogic:
-    def __init__(self):
-        self.equation = ""
-        self.history = []
-
-    # --- RESET ---
-    def clear(self):
-        self.equation = ""
-
-    # --- AJOUTER UNE VALEUR ---
-    def add_value(self, value):
-        conversions = {"×": "*", "÷": "/", ",": "."}
-        self.equation += conversions.get(value, value)
-
-    # --- CALCULER LE RÉSULTAT ---
-    def calculate(self):
-        try:
-            result = self._evaluate(self.equation)
-            result_str = self._format_result(result)
-            self.history.insert(0, f"{self.equation} = {result_str}")
-            self.equation = str(result)
-            return result_str
-        except Exception:
-            self.equation = ""
-            return "Erreur"
-
-    # --- ÉVALUATION PRINCIPALE ---
-    def _evaluate(self, expr):
-        expr = expr.replace(" ", "")
-        tokens = self._tokenize(expr)
-        tokens = self._apply_operations(tokens, ["*", "/", "%"])
-        tokens = self._apply_operations(tokens, ["+", "-"])
-        return tokens[0]
-
-    # --- TOKENISER L'EXPRESSION ---
-    def _tokenize(self, expr):
-        pattern = r'(\d+\.?\d*|[+\-*/%])'
-        elements = re.findall(pattern, expr)
-
-        tokens = []
-        for e in elements:
-            if re.match(r'\d+\.?\d*', e):
-                tokens.append(float(e))
-            else:
-                tokens.append(e)
-        return tokens
-
-    # --- APPLIQUER LES OPÉRATIONS ---
-    def _apply_operations(self, tokens, operators):
+    def parser_expresion(self,str:str)->list:
+            tokens = []
+            num = ""
+            for i in str:
+                if i in "+-*/":
+                    tokens.append(int(num))
+                    tokens.append(i)
+                    num = ""
+                else:
+                    num += i
+            tokens.append(int(num))
+            return tokens
+        
+    def start_solving(self, list_elements: list):
         i = 0
-        while i < len(tokens):
-            if tokens[i] in operators:
-                left = tokens[i - 1]
-                op = tokens[i]
-                right = tokens[i + 1]
-                result = self._compute(left, op, right)
-                tokens[i - 1:i + 2] = [result]
+        while i < len(list_elements) - 1:
+            if list_elements[i] in ("*", "/"):
+                left = list_elements[i - 1]
+                right = list_elements[i + 1]
+                
+                if list_elements[i] == "*":
+                    print("we find *")
+                    result = left * right
+                else:  # "/"
+                    result = left / right
+                
+                list_elements[i - 1] = result
+                del list_elements[i:i + 2]  
+                print("After operation:", list_elements)
             else:
                 i += 1
-        return tokens
 
-    # --- CALCUL D'UNE OPÉRATION ---
-    def _compute(self, a, op, b):
-        operations = {
-            "+": lambda x, y: x + y,
-            "-": lambda x, y: x - y,
-            "*": lambda x, y: x * y,
-            "/": lambda x, y: x / y if y != 0 else float('inf'),
-            "%": lambda x, y: x % y,
-        }
-        return operations[op](a, b)
+        # Phase 2: Now handle + and - (lower precedence)
+        i = 0
+        while i < len(list_elements) - 1:
+            if list_elements[i] in ("+", "-"):
+                left = list_elements[i - 1]
+                right = list_elements[i + 1]
+                
+                if list_elements[i] == "+":
+                    result = left + right
+                else:  # "-"
+                    result = left - right
+                
+                list_elements[i - 1] = result
+                del list_elements[i:i + 2]  # remove operator and right operand
+                
+                # Do NOT increment i — same reason as above
+                print("After operation:", list_elements)
+            else:
+                i += 1
 
-    # --- FORMATER LE RÉSULTAT ---
-    def _format_result(self, value):
-        return f"{value:g}".replace(".", ",")
+        return list_elements
+    
+    def add():
+        pass
+    
+    def add():
+        pass
 
-    # --- HISTORIQUE FORMATÉ ---
-    def get_formatted_history(self):
-        formatted = []
-        for h in self.history:
-            clean = h.replace("*", "×").replace("/", "÷").replace(".", ",")
-            formatted.append(clean)
-        return "\n\n".join(formatted)
+    def add():
+        pass
+
+    def save_to_log():
+        pass
+
+
+c = Calculator()
+print(c.start_solving(c.parser_expresion("23+4+12*2")))

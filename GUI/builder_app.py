@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from Calculator import CalculatorLogic
+from Calculator import Calculator
 
 # --- CONFIGURATION APP ---
 ctk.set_appearance_mode("dark")
@@ -18,7 +18,7 @@ class CalculatriceApp(ctk.CTk):
         super().__init__()
 
         # --- LOGIQUE ---
-        self.calc = CalculatorLogic()
+        self.calc = Calculator()
         self.historique_visible = True
         
 
